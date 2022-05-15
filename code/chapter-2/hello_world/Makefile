@@ -1,19 +1,8 @@
+
 CLANG = clang
-
 EXECABLE = monitor-exec
-
 BPFCODE = bpf_program
-
-BPFTOOLS = /kernel-src/samples/bpf
-BPFLOADER = bpf_loader.c
 BPFTEST = /kernel-src/tools/testing/selftests/bpf/trace_helpers.c
-
-CCINCLUDE += -I/kernel-src/tools/testing/selftests/bpf
-
-LOADINCLUDE += -I/kernel-src/samples/bpf
-LOADINCLUDE += -I/kernel-src/tools/lib
-LOADINCLUDE += -I/kernel-src/tools/perf
-LOADINCLUDE += -I/kernel-src/tools/include
 LOADINCLUDE += -I/kernel-src/tools/testing/selftests/bpf
 LIBRARY_PATH = -L/usr/local/lib64
 BPFSO = -lbpf
@@ -38,14 +27,13 @@ CFLAGS += $(shell grep -q "define HAVE_ATTR_TEST 1" /kernel-src/tools/perf/perf-
 .PHONY: clean $(CLANG) bpfload build
 
 clean:
-	rm -f *.o *.so $(EXECABLE)
+        rm -f *.o *.so $(EXECABLE)
 
-build: ${BPFCODE.c} ${BPFLOADER}
-	$(CLANG) -O2 -target bpf -c $(BPFCODE:=.c) $(CCINCLUDE) -o ${BPFCODE:=.o}
+build:
+        $(CLANG) -O2 -target bpf -c $(BPFCODE:=.c)  -o ${BPFCODE:=.o}
 
 bpfload: build
-	clang $(CFLAGS) -o $(EXECABLE) -lelf $(LOADINCLUDE) $(LIBRARY_PATH) $(BPFSO) \
-        $(BPFLOADER) $(BPFTEST) loader_bpf_obj.c
+        clang $(CFLAGS) -o $(EXECABLE) -lelf $(LOADINCLUDE) $(LIBRARY_PATH) $(BPFSO) $(BPFTEST) loader.c
 
 $(EXECABLE): bpfload
 

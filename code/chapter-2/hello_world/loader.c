@@ -1,18 +1,46 @@
-#include "bpf_load.h"
 #include <stdio.h>
+#include <bpf/libbpf.h>
+#include <unistd.h>
 #include "trace_helpers.h"
 
-int main(int argc, char **argv) {
 
-  // load_bpf_file 函数定义在 bpf_load.h 中， 5.10 以上版本的内核移除了上述文件。我们可以将该 bpf_load.h/bpf_loader.c 复制到当前目录。
-  if (load_bpf_file("bpf_program.o") != 0) {
-    printf("The kernel didn't load the BPF program\n");
-    return -1;
-  }
+int main(int ac, char **argv)
+{
+	struct bpf_link *link = NULL;
+	struct bpf_program *prog;
+	struct bpf_object *obj;
 
+    // 加载bpf文件
+	obj = bpf_object__open_file("bpf_program.o", NULL);
+	if (libbpf_get_error(obj)) {
+		fprintf(stderr, "ERROR: opening BPF object file failed\n");
+		return 0;
+	}
 
+    // 检查文件是否包含 bpf 程序
+	prog = bpf_object__find_program_by_name(obj, "bpf_prog_hello_world");
+	if (!prog) {
+		fprintf(stderr, "ERROR: finding a prog in obj file failed\n");
+		goto cleanup;
+	}
 
-  read_trace_pipe();
+	/* load BPF program */
+	if (bpf_object__load(obj)) {
+		fprintf(stderr, "ERROR: loading BPF object file failed\n");
+		goto cleanup;
+	}
 
-  return 0;
+	link = bpf_program__attach(prog);
+	if (libbpf_get_error(link)) {
+		fprintf(stderr, "ERROR: bpf_program__attach failed\n");
+		link = NULL;
+		goto cleanup;
+	}
+
+	read_trace_pipe();
+
+cleanup:
+	bpf_link__destroy(link);
+	bpf_object__close(obj);
+	return 0;
 }
