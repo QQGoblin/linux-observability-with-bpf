@@ -1,0 +1,22 @@
+{
+    "makefile.extensionOutputFolder": "./.vscode",
+    "files.associations": {
+        "string.h": "c",
+        "syscall.h": "c",
+        "bpf.h": "c",
+        "stdbool.h": "c",
+        "ioctl.h": "c",
+        "bpf_load.h": "c",
+        "fcntl.h": "c",
+        "perf_event.h": "c",
+        "filter.h": "c",
+        "unistd.h": "c",
+        "gelf.h": "c",
+        "errno.h": "c",
+        "netlink.h": "c",
+        "poll.h": "c",
+        "assert.h": "c",
+        "socket.h": "c",
+        "mman.h": "c"
+    }
+}
