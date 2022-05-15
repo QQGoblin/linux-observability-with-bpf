@@ -17,6 +17,9 @@
         "poll.h": "c",
         "assert.h": "c",
         "socket.h": "c",
-        "mman.h": "c"
+        "mman.h": "c",
+        "trace_helpers.h": "c",
+        "bpf_helper_defs.h": "c",
+        "libbpf.h": "c"
     }
 }
