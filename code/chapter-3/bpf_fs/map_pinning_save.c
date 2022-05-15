@@ -2,7 +2,6 @@
 #include <linux/bpf.h>
 #include <stdio.h>
 #include <string.h>
-#include <bpf/bpf_helper_defs.h>
 #include <bpf/bpf.h>
 
 static const char *file_path = "/sys/fs/bpf/my_array";
