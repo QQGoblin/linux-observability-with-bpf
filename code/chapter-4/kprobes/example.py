@@ -12,6 +12,7 @@ int do_sys_execve(struct pt_regs *ctx) {
 """
 
 bpf = BPF(text=bpf_source)
+# 等价于 SEC("tracepoint/syscalls/sys_enter_execve") ？？
 execve_function = bpf.get_syscall_fnname("execve")
 bpf.attach_kprobe(event=execve_function, fn_name="do_sys_execve")
 bpf.trace_print()

@@ -20,6 +20,8 @@
         "mman.h": "c",
         "trace_helpers.h": "c",
         "bpf_helper_defs.h": "c",
-        "libbpf.h": "c"
+        "libbpf.h": "c",
+        "ptrace.h": "c",
+        "bpf_tracing.h": "c"
     }
 }
